@@ -26,7 +26,7 @@ const Sidebar = () => {
             category: 'Nutrition',
             items: [
                 { path: '/nutrition/food-database', label: 'Food Database', icon: 'restaurant' },
-                { path: '/nutrition/calorie-tracking', label: 'Calorie Tracking', icon: 'monitoring' },
+                { path: '/nutrition/calorie-tracking', label: 'Calorie Tracking', icon: 'show_chart' },
                 { path: '/nutrition/meal-plans', label: 'Meal Plans', icon: 'menu_book' },
             ]
         },
@@ -41,8 +41,8 @@ const Sidebar = () => {
             category: 'Goals & Progress',
             items: [
                 { path: '/goals', label: 'Fitness Goals', icon: 'flag' },
-                { path: '/social-workout', label: 'Social Workouts', icon: 'groups', disabled: true },
-                { path: '/community', label: 'Community', icon: 'forum', disabled: true },
+                { path: '/workout/saved-workouts', label: 'Social Workouts', icon: 'groups' },
+                { path: '/discussion-form', label: 'Community', icon: 'forum' },
             ]
         },
         { path: '/profile', label: 'Profile', icon: 'person' },

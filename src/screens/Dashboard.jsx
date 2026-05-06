@@ -35,8 +35,8 @@ const Dashboard = () => {
                 setIsLoading(true);
 
                 // Fetch user profile data
-                const profileResponse = await axios.get('http://localhost:3030/api/user/profile', {
-                    headers: { Authorization: token }
+                const profileResponse = await axios.get('http://localhost:3030/api/profile', {
+                    headers: { Authorization: `Bearer ${token}` }
                 });
 
                 setUserData(profileResponse.data);
@@ -45,8 +45,8 @@ const Dashboard = () => {
                 localStorage.setItem('userData', JSON.stringify(profileResponse.data));
 
                 // Fetch goals data
-                const goalsResponse = await axios.get('http://localhost:3030/api/user/goals', {
-                    headers: { Authorization: token }
+                const goalsResponse = await axios.get('http://localhost:3030/api/profile/goals', {
+                    headers: { Authorization: `Bearer ${token}` }
                 });
 
                 // Find the first active goal
@@ -144,7 +144,7 @@ const Dashboard = () => {
             <div className="dashboard-layout">
                 <Sidebar />
                 <div className="dashboard-main loading-state">
-                    <div className="loading-spinner">Loading...</div>
+                    <div className="loading-spinner">Loading your dashboard...</div>
                 </div>
             </div>
         );
@@ -155,6 +155,7 @@ const Dashboard = () => {
             <Sidebar />
 
             <div className="dashboard-main">
+                {/* Top Header */}
                 <header className="dashboard-header">
                     <div className="greeting-container">
                         <h1>Dashboard</h1>
@@ -189,22 +190,74 @@ const Dashboard = () => {
                     </div>
                 </header>
 
-                <div className="welcome-section">
-                    <div className="welcome-text">
-                        <h2>Welcome back, {userData?.name || 'User'}!</h2>
-                        <div className="quote-container">
-                            <p className="quote">"{quote.text}"</p>
-                            <p className="quote-author">- {quote.author}</p>
+                {/* Welcome Banner with Gradient */}
+                <div className="welcome-banner">
+                    <div className="welcome-content">
+                        <p className="welcome-greeting">Welcome back</p>
+                        <h2 className="welcome-name">{userData?.name || 'User'} 💪</h2>
+                        <div className="welcome-quote">
+                            <i className="material-icons quote-icon">format_quote</i>
+                            <div>
+                                <p className="quote-text">{quote.text}</p>
+                                <p className="quote-author">— {quote.author}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                {/* Quick Stats Row */}
+                <div className="quick-stats-row">
+                    <div className="quick-stat-card">
+                        <div className="stat-icon-wrapper red">
+                            <i className="material-icons">fitness_center</i>
+                        </div>
+                        <div className="stat-text">
+                            <span className="stat-value">3</span>
+                            <span className="stat-label">Workouts This Week</span>
+                        </div>
+                    </div>
+
+                    <div className="quick-stat-card">
+                        <div className="stat-icon-wrapper yellow">
+                            <i className="material-icons">schedule</i>
+                        </div>
+                        <div className="stat-text">
+                            <span className="stat-value">120</span>
+                            <span className="stat-label">Minutes Active</span>
+                        </div>
+                    </div>
+
+                    <div className="quick-stat-card">
+                        <div className="stat-icon-wrapper green">
+                            <i className="material-icons">restaurant</i>
+                        </div>
+                        <div className="stat-text">
+                            <span className="stat-value">1,850</span>
+                            <span className="stat-label">Calories Today</span>
+                        </div>
+                    </div>
+
+                    <div className="quick-stat-card">
+                        <div className="stat-icon-wrapper blue">
+                            <i className="material-icons">flag</i>
+                        </div>
+                        <div className="stat-text">
+                            <span className="stat-value">{activeGoal ? getTimeLeft(activeGoal) : '—'}</span>
+                            <span className="stat-label">Goal Deadline</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Cards Grid */}
                 <div className="dashboard-grid-container">
                     <div className="dashboard-grid">
-                        {/* Activity Summary Card */}
+                        {/* Activity / Goal Card */}
                         <div className="dashboard-card">
                             <div className="card-header">
-                                <h3>Activity Summary</h3>
+                                <div className="card-header-icon red">
+                                    <i className="material-icons">flag</i>
+                                </div>
+                                <h3>Active Goal</h3>
                             </div>
                             <div className="card-content">
                                 {activeGoal ? (
@@ -239,7 +292,7 @@ const Dashboard = () => {
                                     </div>
                                 ) : (
                                     <div className="empty-state">
-                                        <p>No active goals</p>
+                                        <p>No active goals yet</p>
                                         <Link to="/goals" className="card-link">
                                             Set a Goal <i className="material-icons">add</i>
                                         </Link>
@@ -251,6 +304,9 @@ const Dashboard = () => {
                         {/* Workout Card */}
                         <div className="dashboard-card">
                             <div className="card-header">
+                                <div className="card-header-icon yellow">
+                                    <i className="material-icons">fitness_center</i>
+                                </div>
                                 <h3>Workouts</h3>
                             </div>
                             <div className="card-content">
@@ -258,16 +314,16 @@ const Dashboard = () => {
                                     <div className="stat-container">
                                         <div className="stat">
                                             <span className="stat-value">3</span>
-                                            <span className="stat-label">Workouts this week</span>
+                                            <span className="stat-label">This Week</span>
                                         </div>
                                         <div className="stat">
                                             <span className="stat-value">120</span>
-                                            <span className="stat-label">Minutes active</span>
+                                            <span className="stat-label">Minutes</span>
                                         </div>
                                     </div>
 
                                     <Link to="/workout" className="card-link">
-                                        Track Workout <i className="material-icons">fitness_center</i>
+                                        Track Workout <i className="material-icons">arrow_forward</i>
                                     </Link>
                                 </div>
                             </div>
@@ -276,6 +332,9 @@ const Dashboard = () => {
                         {/* Nutrition Card */}
                         <div className="dashboard-card">
                             <div className="card-header">
+                                <div className="card-header-icon green">
+                                    <i className="material-icons">restaurant</i>
+                                </div>
                                 <h3>Nutrition</h3>
                             </div>
                             <div className="card-content">
@@ -283,7 +342,7 @@ const Dashboard = () => {
                                     <div className="stat-container">
                                         <div className="stat">
                                             <span className="stat-value">1,850</span>
-                                            <span className="stat-label">Calories today</span>
+                                            <span className="stat-label">Calories</span>
                                         </div>
                                         <div className="stat">
                                             <span className="stat-value">85g</span>
@@ -291,16 +350,20 @@ const Dashboard = () => {
                                         </div>
                                     </div>
 
-                                    <Link to="/food-database" className="card-link">
-                                        Log Food <i className="material-icons">restaurant</i>
+                                    <Link to="/nutrition/food-database" className="card-link">
+                                        Log Food <i className="material-icons">arrow_forward</i>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    {/* Social Section */}
                     <div className="social-section">
                         <div className="section-header">
+                            <div className="section-header-icon">
+                                <i className="material-icons">people</i>
+                            </div>
                             <h3>Social Activity</h3>
                         </div>
 
@@ -337,9 +400,8 @@ const Dashboard = () => {
                                     </div>
                                 )}
 
-                                <Link to="/community" className="section-link disabled">
+                                <Link to="/discussion-form" className="section-link">
                                     Go to Community <i className="material-icons">arrow_forward</i>
-                                    <span className="coming-soon">Coming soon</span>
                                 </Link>
                             </div>
 
@@ -359,13 +421,12 @@ const Dashboard = () => {
                                     </div>
                                 ) : (
                                     <div className="empty-groups">
-                                        <p>You're not in any workout groups yet</p>
+                                        <p>You&apos;re not in any workout groups yet</p>
                                     </div>
                                 )}
 
-                                <Link to="/social-workout" className="section-link disabled">
-                                    Find Workout Partners <i className="material-icons">groups</i>
-                                    <span className="coming-soon">Coming soon</span>
+                                <Link to="/workout/saved-workouts" className="section-link">
+                                    Browse Public Workouts <i className="material-icons">arrow_forward</i>
                                 </Link>
                             </div>
                         </div>

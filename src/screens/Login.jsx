@@ -29,9 +29,14 @@ const Login = () => {
             // const data = await response.json();
             if (response.ok) {
                 console.log("Login Succesful");
-                const { token } = await response.json();
+                const { token, user } = await response.json();
                 localStorage.setItem('token', token); // Store token in localStorage
                 localStorage.setItem('isAuthenticated', 'true'); // Set authentication flag
+                // Store user data so dashboard can show the name immediately
+                if (user) {
+                    localStorage.setItem('userData', JSON.stringify(user));
+                    localStorage.setItem('userId', user.id);
+                }
                 // Redirect to dashboard or other protected page
                 window.location.href = '/dashboard'; // Add redirect to dashboard
             } else {

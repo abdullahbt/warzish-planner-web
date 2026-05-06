@@ -12,21 +12,21 @@ import { authenticateToken } from './authRoutes.js';
 const router = Router();
 
 // Get all tweets
-router.get('/tweets', authenticateToken, getAllTweets);
+router.get('/', authenticateToken, getAllTweets);
 
 // Create a new tweet
-router.post('/tweets', authenticateToken, createTweet);
+router.post('/', authenticateToken, createTweet);
 
 // Get a single tweet
-router.get('/tweets/:tweetId', authenticateToken, getTweetById);
+router.get('/:tweetId', authenticateToken, getTweetById);
 
 // Like/unlike a tweet
-router.post('/tweets/:tweetId/like', authenticateToken, likeTweet);
+router.post('/:tweetId/like', authenticateToken, likeTweet);
 
 // Comment on a tweet
-router.post('/tweets/:tweetId/comment', authenticateToken, commentOnTweet);
+router.post('/:tweetId/comment', authenticateToken, commentOnTweet);
 
 // Delete a tweet
-router.delete('/tweets/:tweetId', authenticateToken, deleteTweet);
+router.delete('/:tweetId', authenticateToken, deleteTweet);
 
 export default router;

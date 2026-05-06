@@ -31,11 +31,16 @@ const SignUp = () => {
             if (response.ok) {
                 // User successfully registered
                 console.log("User registered successfully");
-                const { token } = await response.json();
+                const { token, user } = await response.json();
                 
                 // Store token and set authentication flag
                 localStorage.setItem('token', token);
                 localStorage.setItem('isAuthenticated', 'true');
+                // Store user data so dashboard can show the name immediately
+                if (user) {
+                    localStorage.setItem('userData', JSON.stringify(user));
+                    localStorage.setItem('userId', user.id);
+                }
                 
                 // Redirect to dashboard
                 window.location.href = '/dashboard';
